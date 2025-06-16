@@ -2,15 +2,12 @@ import { useContext, useRef } from "react";
 import type { Place } from "../@types/type";
 import ModalPortal from "../utils/portal";
 import { EatingMarkContext } from "../context/eatingMarkContext";
-import useLikePlacesGet from "../hooks/useLikePlacesGet";
 import useLikePlacesDelete from "../hooks/useLikePlacesDelete";
 
 export default function LikePlace() {
   const { likePlace, setModalOpen, modalOpen } = useContext(EatingMarkContext);
 
   const seletedPlace = useRef<Place>(null);
-
-  useLikePlacesGet();
 
   const deleteLikePlace = useLikePlacesDelete();
 

@@ -1,25 +1,30 @@
 import { useContext, useEffect } from "react";
 import { EatingMarkContext } from "../context/eatingMarkContext";
+import useApi from "./useApi";
 import type { PlacesResponse } from "../@types/type";
 
 export default function useLikePlaces(): void {
   const { setLikePlace } = useContext(EatingMarkContext);
-  const likePlaces = async (): Promise<void> => {
-    try {
-      const response = await fetch("http://localhost:3000/users/places");
-      const data: PlacesResponse = await response.json();
-
-      if (data.error) {
-        setLikePlace([]);
-      } else {
-        setLikePlace(data.places);
-      }
-    } catch (err: unknown) {
-      console.log("에러", err);
-    }
-  };
+  const { get } = useApi();
 
   useEffect(() => {
-    likePlaces();
+    const fetchLikePlaces = async () => {
+      try {
+        const data = (await get(
+          "http://localhost:3000/users/places"
+        )) as PlacesResponse;
+
+        if (!data || data.error || !Array.isArray(data.places)) {
+          setLikePlace([]);
+        } else {
+          setLikePlace(data.places);
+        }
+      } catch (err) {
+        console.error("찜 목록 불러오기 실패:", err);
+        setLikePlace([]);
+      }
+    };
+
+    fetchLikePlaces();
   }, []);
 }

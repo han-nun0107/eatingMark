@@ -24,8 +24,8 @@ export default function PlacesErrorFalse() {
           >
             <div className="w-full h-[225px]">
               <img
-                src={`http://localhost:3000/${places.image.src}`}
-                alt={places.image.alt}
+                src={`http://localhost:3000/${places.image?.src}`}
+                alt={places.image?.alt}
                 className="w-full h-full object-cover"
               />
             </div>

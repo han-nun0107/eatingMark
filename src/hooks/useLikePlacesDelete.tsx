@@ -1,29 +1,18 @@
+import type { Place } from "../@types/type";
+import useApi from "./useApi";
 import { useContext } from "react";
 import { EatingMarkContext } from "../context/eatingMarkContext";
-import type { Place } from "../@types/type";
 
-export default function useLikePlacesDelete(): (place: Place) => Promise<void> {
+export default function useLikePlacesDelete() {
+  const { del } = useApi();
   const { setLikePlace } = useContext(EatingMarkContext);
 
-  const deleteLikePlace = async (place: Place): Promise<void> => {
+  return async (place: Place) => {
     try {
-      const response = await fetch(
-        `http://localhost:3000/users/places/${place.id}`,
-        {
-          method: "DELETE",
-        }
-      );
-
-      if (!response.ok) {
-        console.error("삭제 실패:", response.status);
-        return;
-      }
-
+      await del(`http://localhost:3000/users/places/${place.id}`);
       setLikePlace((lp) => lp.filter((p) => p.id !== place.id));
-    } catch (err) {
+    } catch (err: unknown) {
       console.error("요청 실패:", err);
     }
   };
-
-  return deleteLikePlace;
 }
